@@ -1,0 +1,47 @@
+{% extends 'bliss/base.html' %}
+{% load custom_filters %}
+{% block title %}Relatório HTML{% endblock %}
+{% block content %}
+<h3>Relatório Geral</h3>
+<a href="{% url 'bliss_pdf_report' %}" class="btn btn-sm btn-danger mb-3">Exportar PDF</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="min-width: 80px;">Bloco</th>
+            <th style="min-width: 100px;">Unidade</th>
+            <th style="min-width: 80px;">Área Privativa</th>
+            <th style="min-width: 200px;">Garagem</th>
+            <th>Depósito</th>
+            <th style="min-width: 80px;">Área Total</th>
+            <th>Tipologia</th>
+            <th>Situação</th>
+            <th style="min-width: 200px;">Valor Tabela</th>
+            <th style="min-width: 100px;">Unidade</th>
+            <th>Data Venda</th>
+            <th style="min-width: 200px;">Valor Venda</th>
+            <th style="min-width: 400px;">Cliente</th>
+            <th style="min-width: 400px;">E-mail</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in registros %}
+        <tr>
+            <td>{{ item.bloco }}</td>
+            <td>{{ item.unidade }}</td>
+            <td>{{ item.area_privativa }}</td>
+            <td>{{ item.garagem }}</td>
+            <td>{{ item.deposito }}</td>
+            <td>{{ item.area_total }}</td>
+            <td>{{ item.tipologia }}</td>
+            <td>{{ item.situacao }}</td>
+            <td>{{ item.valor_tabela|format_real }}</td>
+            <td>{{ item.unidade }}</td>
+            <td>{{ item.data_venda|date:"d/m/Y" }}</td>
+            <td>{{ item.valor_venda|format_real }}</td>
+            <td>{{ item.cliente }}</td>
+            <td>{{ item.email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
