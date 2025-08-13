@@ -1,0 +1,165 @@
+{% extends 'bliss/base.html' %}
+{% load custom_filters %}
+{% block title %}Relatório HTML{% endblock %}
+
+{% block content %}
+<h3>Relatório Geral</h3>
+<a href="{% url 'bliss_pdf_report' %}" class="btn btn-sm btn-danger mb-3">Exportar PDF</a>
+
+{# ======= DESKTOP/TABLET: Tabela completa ======= #}
+<div class="d-none d-md-block">
+  <table class="table table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th style="min-width: 80px;">
+          <a href="?sort=bloco&dir={% if sort == 'bloco' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Bloco {% if sort == 'bloco' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 100px;">
+          <a href="?sort=unidade&dir={% if sort == 'unidade' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Unidade {% if sort == 'unidade' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 80px;">
+          <a href="?sort=area_privativa&dir={% if sort == 'area_privativa' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Área Privativa {% if sort == 'area_privativa' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 200px;">
+          <a href="?sort=garagem&dir={% if sort == 'garagem' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Garagem {% if sort == 'garagem' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th>
+          <a href="?sort=deposito&dir={% if sort == 'deposito' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Depósito {% if sort == 'deposito' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 80px;">
+          <a href="?sort=area_total&dir={% if sort == 'area_total' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Área Total {% if sort == 'area_total' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th>
+          <a href="?sort=tipologia&dir={% if sort == 'tipologia' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Tipologia {% if sort == 'tipologia' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th>
+          <a href="?sort=situacao&dir={% if sort == 'situacao' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Situação {% if sort == 'situacao' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 200px;">
+          <a href="?sort=valor_tabela&dir={% if sort == 'valor_tabela' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Valor Tabela {% if sort == 'valor_tabela' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th>
+          <a href="?sort=data_venda&dir={% if sort == 'data_venda' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Data Venda {% if sort == 'data_venda' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 200px;">
+          <a href="?sort=valor_venda&dir={% if sort == 'valor_venda' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Valor Venda {% if sort == 'valor_venda' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 400px;">
+          <a href="?sort=cliente&dir={% if sort == 'cliente' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            Cliente {% if sort == 'cliente' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th style="min-width: 400px;">
+          <a href="?sort=email&dir={% if sort == 'email' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            E-mail {% if sort == 'email' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+        <th>
+          <a href="?sort=perc_permuta&dir={% if sort == 'perc_permuta' and dir == 'asc' %}desc{% else %}asc{% endif %}">
+            % Permuta {% if sort == 'perc_permuta' %}{% if dir == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in registros %}
+      <tr>
+        <td>{{ item.bloco }}</td>
+        <td>{{ item.unidade }}</td>
+        <td>{{ item.area_privativa|floatformat:2 }}</td>
+        <td>{{ item.garagem }}</td>
+        <td>{{ item.deposito }}</td>
+        <td>{{ item.area_total|floatformat:2 }}</td>
+        <td>{{ item.tipologia }}</td>
+        <td>{{ item.situacao }}</td>
+        <td>{{ item.valor_tabela|format_real }}</td>
+        <td>{{ item.data_venda|date:"d/m/Y" }}</td>
+        <td>{{ item.valor_venda|format_real }}</td>
+        <td>{{ item.cliente }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.perc_permuta|floatformat:6 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# ======= CELULAR: Cartões empilhados (resumo legível) ======= #}
+<div class="d-block d-md-none">
+  {% for item in registros %}
+  <div class="card mb-2 shadow-sm">
+    <div class="card-body py-2">
+      <div class="d-flex justify-content-between align-items-baseline">
+        <h6 class="mb-1">
+          <span class="badge bg-dark me-1">{{ item.bloco }}</span>
+          Unidade {{ item.unidade }}
+        </h6>
+        <small class="text-muted">{{ item.situacao }}</small>
+      </div>
+
+      <div class="mt-1">
+        <div><strong>Área Priv.:</strong> {{ item.area_privativa|floatformat:2 }} m²</div>
+        <div><strong>Área Total:</strong> {{ item.area_total|floatformat:2 }} m²</div>
+        {% if item.garagem %}<div><strong>Garagem:</strong> {{ item.garagem }}</div>{% endif %}
+        {% if item.deposito %}<div><strong>Depósito:</strong> {{ item.deposito }}</div>{% endif %}
+        {% if item.tipologia %}<div><strong>Tipologia:</strong> {{ item.tipologia }}</div>{% endif %}
+      </div>
+
+      <hr class="my-2">
+
+      <div class="row g-1">
+        <div class="col-6">
+          <div class="small text-muted">Valor Tabela</div>
+          <div class="fw-bold">{{ item.valor_tabela|format_real }}</div>
+        </div>
+        <div class="col-6">
+          <div class="small text-muted">Valor Venda</div>
+          <div class="fw-bold">
+            {% if item.valor_venda %}{{ item.valor_venda|format_real }}{% else %}-{% endif %}
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="small text-muted">Data Venda</div>
+          <div>{% if item.data_venda %}{{ item.data_venda|date:"d/m/Y" }}{% else %}-{% endif %}</div>
+        </div>
+        <div class="col-6">
+          <div class="small text-muted">% Permuta</div>
+          <div>{{ item.perc_permuta|floatformat:6 }}</div>
+        </div>
+      </div>
+
+      {% if item.cliente or item.email %}
+      <div class="mt-2 small">
+        {% if item.cliente %}<div><strong>Cliente:</strong> {{ item.cliente }}</div>{% endif %}
+        {% if item.email %}<div class="text-truncate"><strong>E-mail:</strong> {{ item.email }}</div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <div class="alert alert-info">Nenhum registro encontrado.</div>
+  {% endfor %}
+</div>
+{% endblock %}
